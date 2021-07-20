@@ -1,6 +1,6 @@
-package com.openchowski.inventorymanagement.dao;
+package com.openchowski.carmanagement.dao;
 
-import com.openchowski.inventorymanagement.entity.Employee;
+import com.openchowski.carmanagement.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EmployeeRepo extends JpaRepository<Employee, Integer> {

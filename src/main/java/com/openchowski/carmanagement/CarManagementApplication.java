@@ -1,13 +1,13 @@
-package com.openchowski.inventorymanagement;
+package com.openchowski.carmanagement;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class InventoryManagementApplication {
+public class CarManagementApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(InventoryManagementApplication.class, args);
+        SpringApplication.run(CarManagementApplication.class, args);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.openchowski.inventorymanagement.entity;
+package com.openchowski.carmanagement.entity;
 
 
 import javax.persistence.*;

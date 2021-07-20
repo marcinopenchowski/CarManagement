@@ -1,14 +1,13 @@
-package com.openchowski.inventorymanagement.controller;
+package com.openchowski.carmanagement.controller;
 
-import com.openchowski.inventorymanagement.entity.Asset;
-import com.openchowski.inventorymanagement.service.AssetService;
+import com.openchowski.carmanagement.entity.Asset;
+import com.openchowski.carmanagement.service.AssetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller

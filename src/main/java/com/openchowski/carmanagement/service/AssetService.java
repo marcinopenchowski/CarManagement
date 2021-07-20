@@ -1,7 +1,7 @@
-package com.openchowski.inventorymanagement.service;
+package com.openchowski.carmanagement.service;
 
-import com.openchowski.inventorymanagement.dao.AssetRepo;
-import com.openchowski.inventorymanagement.entity.Asset;
+import com.openchowski.carmanagement.dao.AssetRepo;
+import com.openchowski.carmanagement.entity.Asset;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
