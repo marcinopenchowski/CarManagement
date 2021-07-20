@@ -22,23 +22,21 @@ public class Employee {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "job_team")
-    private String jobTeam;
+    @Column(name = "job_title")
+    private String jobTitle;
 
     @Column(name = "phone_number")
     private int phoneNumber;
 
-    @OneToMany(targetEntity = Asset.class, mappedBy = "employeeId")
-    private List<Asset> assets;
 
     public Employee() {
     }
 
-    public Employee(String firstName, String lastName, String email, String jobTeam, int phoneNumber) {
+    public Employee(String firstName, String lastName, String email, String jobTitle, int phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.jobTeam = jobTeam;
+        this.jobTitle = jobTitle;
         this.phoneNumber = phoneNumber;
     }
 
@@ -74,12 +72,12 @@ public class Employee {
         this.email = email;
     }
 
-    public String getJobTeam() {
-        return jobTeam;
+    public String getJobTitle() {
+        return jobTitle;
     }
 
-    public void setJobTeam(String jobTeam) {
-        this.jobTeam = jobTeam;
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
     }
 
     public int getPhoneNumber() {
@@ -90,14 +88,6 @@ public class Employee {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<Asset> getAssets() {
-        return assets;
-    }
-
-    public void setAssets(List<Asset> assets) {
-        this.assets = assets;
-    }
-
     @Override
     public String toString() {
         return "Employee{" +
@@ -105,9 +95,8 @@ public class Employee {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", jobTeam='" + jobTeam + '\'' +
+                ", jobTitle='" + jobTitle + '\'' +
                 ", phoneNumber=" + phoneNumber +
-                ", assets=" + assets +
                 '}';
     }
 }

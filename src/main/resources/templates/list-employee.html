@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <title>Employee List</title>
+  <style>
+    td[data-href]{
+      crusor: pointer;
+    }
+  </style>
+
+</head>
+
+<body>
+  <h3>Employee List</h3>
+  <hr>
+  <form action="#" th:action="@{/employees/delete}" method="POST" th:object="${employee}">
+  <a th:href="@{/employees/showAddForm}" class="btn btn-primary">Add</a>
+  <button type="submit" id="delete" class="btn btn-primary">Delete</button>
+  <br><br>
+    <table class='table table-bordered table-condensed table-striped table-hover'>
+      <thead class="thead-dark">
+        <tr>
+          <th></th>
+          <th>Id</th>
+          <th>Fist Name</th>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+          <th>Job Title</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr class="table-row" th:each="tempEmployee : ${employees}">
+          <td><input type = "checkbox" th:name="idChecked" th:value="${tempEmployee.id}" />
+          <td style="cursor: pointer;" th:data-href="@{/employees/showUpdateForm(employeeId=${tempEmployee.id})}" th:text="${tempEmployee.id}"/>
+          <td style="cursor: pointer;" th:data-href="@{/employees/showUpdateForm(employeeId=${tempEmployee.id})}" th:text="${tempEmployee.firstName}" />
+          <td style="cursor: pointer;" th:data-href="@{/employees/showUpdateForm(employeeId=${tempEmployee.id})}" th:text="${tempEmployee.lastName}" />
+          <td style="cursor: pointer;" th:data-href="@{/employees/showUpdateForm(employeeId=${tempEmployee.id})}" th:text="${tempEmployee.email}" />
+          <td style="cursor: pointer;" th:data-href="@{/employees/showUpdateForm(employeeId=${tempEmployee.id})}" th:text="${tempEmployee.phoneNumber}" />
+          <td style="cursor: pointer;" th:data-href="@{/employees/showUpdateForm(employeeId=${tempEmployee.id})}" th:text="${tempEmployee.jobTitle}" />
+        </tr>
+
+      </tbody>
+
+
+    </table>
+  </form>
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+      const rows = document.querySelectorAll("td[data-href]");
+
+      rows.forEach(row => {
+        row.addEventListener("click", () => {
+            window.location.href = row.dataset.href;
+        })
+
+      })
+
+  })
+
+</script>
+
+
+</body>
+</html>
