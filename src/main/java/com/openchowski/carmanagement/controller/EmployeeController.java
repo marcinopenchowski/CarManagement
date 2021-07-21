@@ -21,14 +21,26 @@ public class EmployeeController {
     }
 
     @GetMapping("/list")
-    public String showAll(Model model){
+    public String showAll(
+            Model model,
+            @RequestParam(value = "sortField", required = false, defaultValue = "id") String sortField,
+            @RequestParam(value = "sortDir", required = false, defaultValue = "asc") String sortDir
 
-        List<Employee> employeeList = employeeService.findAll();
+    ){
+
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
+
+
+        List<Employee> employeeList = employeeService.findAll(sortField, sortDir);
 
         model.addAttribute("employees", employeeList);
 
-        return "list-employee";
+        return "employee/list-employee";
     }
+
 
     @GetMapping("/showAddForm")
     public String showAddForm(Model model){
@@ -37,7 +49,7 @@ public class EmployeeController {
 
         model.addAttribute("employee", employee);
 
-        return "add-employee";
+        return "employee/add-employee";
     }
 
     @GetMapping("/showUpdateForm")
@@ -47,7 +59,7 @@ public class EmployeeController {
 
         model.addAttribute("employee", employee);
 
-        return "add-employee";
+        return "employee/add-employee";
     }
 
     @PostMapping("/save")
@@ -70,6 +82,19 @@ public class EmployeeController {
         }
 
         return "redirect:/employees/list";
+    }
+
+    @GetMapping("/search")
+    public String searchEmployee(@RequestParam(value = "searchName", required = false) String searchName, Model model){
+
+        if(searchName.isBlank()){
+            return "redirect:/employees/list";
+        }
+
+        List<Employee> employeeList = employeeService.searchEmployee(searchName);
+        model.addAttribute("employees", employeeList);
+
+        return "employee/list-employee";
     }
 
 }
