@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <title>Add Rental</title>
+</head>
+
+<body>
+<div class="container">
+  <a th:href="@{/}">Back to Home Page</a>
+  <br>
+  <hr>
+  <h1 class="h1">Pick up Car</h1>
+  <hr>
+  <form action="#" th:action="@{/rentals/edit(rentalId=${rental.getId()})}" th:object="${rental}" method="post">
+
+    <input type="hidden" th:field = "*{id}" />
+
+    <!-- Add Pick up date and return date -->
+
+    <h3 class="h3">Pick Up Date</h3>
+    <input type="text" th:field="*{pickUpDate}" th:value="${#dates.format(rental.pickUpDate, 'dd/MM/yyyy HH:mm:ss:s')}" class="form-control mb-4 col-4" placeholder="dd/MM/yyyy h:mm ">
+    <br>
+    <h3 th:if="*{returnDate != null}" class="h3">Return Date</h3>
+    <input type="text" th:if="*{returnDate != null}" th:field="*{returnDate}" th:value="${#dates.format(rental.returnDate, 'dd/MM/yyyy HH:mm:ss:s')}" class="form-control mb-4 col-4" placeholder="dd/MM/yyyy h:mm">
+    <br>
+    <hr>
+    <h2 class="h2">Choose Car</h2>
+
+    <table class='table table-bordered table-condensed table-striped table-hover'>
+      <thead class="thead-dark">
+      <tr>
+        <th></th>
+        <th><a th:href="@{'/cars/list/' + '?sortField=id&sortDir=' + ${reverseSortDir}}">ID</a></th>
+        <th><a th:href="@{'/cars/list/' + '?sortField=make&sortDir=' + ${reverseSortDir}}">Make</a></th>
+        <th><a th:href="@{'/cars/list/' + '?sortField=model&sortDir=' + ${reverseSortDir}}">Model</a></th>
+        <th><a th:href="@{'/cars/list/' + '?sortField=year&sortDir=' + ${reverseSortDir}}">Year</a></th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr class="table-row" th:each="tempCar : ${cars}">
+        <td>
+          <input type = "radio" th:name="idCheckedCar" th:value="${tempCar.id}" />
+        </td>
+        <td th:text="${tempCar.id}"/>
+        <td th:text="${tempCar.make}" />
+        <td th:text="${tempCar.model}" />
+        <td th:text="${tempCar.year}" />
+      </tr>
+
+      </tbody>
+
+
+    </table>
+
+    <br><br>
+    <hr>
+    <h2 class="h2">Choose Employee</h2>
+
+    <table class='table table-bordered table-condensed table-striped table-hover'>
+      <thead class="thead-dark">
+      <tr>
+        <th></th>
+        <th><a th:href="@{'/employees/list/' + '?sortField=id&sortDir=' + ${reverseSortDir}}">ID</a></th>
+        <th><a th:href="@{'/employees/list/' + '?sortField=firstName&sortDir=' + ${reverseSortDir}}">Fist Name</a></th>
+        <th><a th:href="@{'/employees/list/' + '?sortField=lastName&sortDir=' + ${reverseSortDir}}">Last Name</a></th>
+        <th><a th:href="@{'/employees/list/' + '?sortField=Email&sortDir=' + ${reverseSortDir}}">Email</a></th>
+        <th><a th:href="@{'/employees/list/' + '?sortField=phoneNumber&sortDir=' + ${reverseSortDir}}">Phone Number</a></th>
+        <th><a th:href="@{'/employees/list/' + '?sortField=jobTitle&sortDir=' + ${reverseSortDir}}">Job Title</a></th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr class="table-row" th:each="tempEmployee : ${employees}">
+        <td>
+          <input type = "radio" th:name="idCheckedEmployee" th:value="${tempEmployee.id}" />
+        </td>
+        <td th:text="${tempEmployee.id}"/>
+        <td th:text="${tempEmployee.firstName}" />
+        <td th:text="${tempEmployee.lastName}" />
+        <td th:text="${tempEmployee.email}" />
+        <td th:text="${tempEmployee.phoneNumber}" />
+        <td th:text="${tempEmployee.jobTitle}" />
+      </tr>
+      </tbody>
+
+
+    </table>
+
+    <button type="submit">Done</button>
+  </form>
+</div>
+</body>
+</html>

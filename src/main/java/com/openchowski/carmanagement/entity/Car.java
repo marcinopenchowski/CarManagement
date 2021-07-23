@@ -21,7 +21,7 @@ public class Car {
     private int year;
 
     @Column(name = "status")
-    private String status;
+    private String status = "available";
 
 
     public Car() {
