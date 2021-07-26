@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+
+  <title>HomePage</title>
+</head>
+<body>
+<div class="container">
+  <h1 class = h1>Car Management</h1>
+  <hr>
+  <a href="/employees/list" class="btn btn-primary">Display Employees List</a> ||
+  <a href="/employees/showAddForm" class="btn btn-success">Add a Employee</a>
+  <br><br>
+  <a href="/cars/list" class="btn btn-primary" >Display Cars List</a> ||
+  <a href="/cars/showAddForm" class="btn btn-success">Add a Car</a>
+  <br><br>
+  <a href="/rentals/list" class="btn btn-primary" >Display Rental List</a> ||
+  <a href="/rentals/showAddForm" class="btn btn-success">Pick up Car</a> ||
+  <a href="/rentals/showReturnForm" class="btn btn-secondary">Return a Car</a>
+
+
+  <form th:action="@{/logout}" th:method="POST">
+    <input th:type="submit" th:value="logout" />
+  </form>
+
+</div>
+</body>
+</html>

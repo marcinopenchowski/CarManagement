@@ -41,12 +41,12 @@
       <thead class="thead-dark">
         <tr>
           <th><input type="checkbox" onclick="toogle(this);"></th>
-          <th><a th:href="@{'/employees/list/' + '?sortField=id&sortDir=' + ${reverseSortDir}}">ID</a></th>
-          <th><a th:href="@{'/employees/list/' + '?sortField=firstName&sortDir=' + ${reverseSortDir}}">Fist Name</a></th>
-          <th><a th:href="@{'/employees/list/' + '?sortField=lastName&sortDir=' + ${reverseSortDir}}">Last Name</a></th>
-          <th><a th:href="@{'/employees/list/' + '?sortField=Email&sortDir=' + ${reverseSortDir}}">Email</a></th>
-          <th><a th:href="@{'/employees/list/' + '?sortField=phoneNumber&sortDir=' + ${reverseSortDir}}">Phone Number</a></th>
-          <th><a th:href="@{'/employees/list/' + '?sortField=jobTitle&sortDir=' + ${reverseSortDir}}">Job Title</a></th>
+          <th><a th:href="@{/employees/list(sortField='id' , sortDir=${reverseSortDir})}">ID</a></th>
+          <th><a th:href="@{/employees/list(sortField='firstName' , sortDir=${reverseSortDir})}">Fist Name</a></th>
+          <th><a th:href="@{/employees/list(sortField='lastName' , sortDir=${reverseSortDir})}">Last Name</a></th>
+          <th><a th:href="@{/employees/list(sortField='email' , sortDir=${reverseSortDir})}">Email</a></th>
+          <th><a th:href="@{/employees/list(sortField='phoneNumber' , sortDir=${reverseSortDir})}">Phone Number</a></th>
+          <th><a th:href="@{/employees/list(sortField='jobTitle' , sortDir=${reverseSortDir})}">Job Title</a></th>
           <th>Action</th>
         </tr>
       </thead>

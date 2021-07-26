@@ -22,12 +22,7 @@ public class RentalService {
 
     public List<Rental> findAll(String sortField, String sortDir){
 
-        Sort sort = sortDir.equalsIgnoreCase(
-                Sort.Direction.ASC.name())  ?
-                        Sort.by(sortField).ascending() :
-                        Sort.by(sortField).descending();
-
-        List<Rental> rentalList = rentalRepo.findAll(sort);
+        List<Rental> rentalList = rentalRepo.findAll(createSort(sortField, sortDir));
 
         return rentalList;
     }
@@ -67,5 +62,15 @@ public class RentalService {
         Rental rental = rentalRepo.findByIdCar(idCar);
 
         return rental;
+    }
+
+    private Sort createSort(String sortField, String sortDirection){
+
+        Sort sort = sortDirection.equalsIgnoreCase(
+                Sort.Direction.ASC.name())
+                ? Sort.by(sortField).ascending()
+                : Sort.by(sortField).descending();
+
+        return sort;
     }
 }

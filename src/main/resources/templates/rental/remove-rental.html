@@ -28,10 +28,10 @@
     <table class='table table-bordered table-condensed table-striped table-hover'>
       <thead class="thead-dark">
         <tr>
-          <th><a th:href="@{'/cars/list/' + '?sortField=id&sortDir=' + ${reverseSortDir}}">ID</a></th>
-          <th><a th:href="@{'/cars/list/' + '?sortField=make&sortDir=' + ${reverseSortDir}}">Make</a></th>
-          <th><a th:href="@{'/cars/list/' + '?sortField=model&sortDir=' + ${reverseSortDir}}">Model</a></th>
-          <th><a th:href="@{'/cars/list/' + '?sortField=year&sortDir=' + ${reverseSortDir}}">Year</a></th>
+          <th><a th:href="@{/rentals/showReturnForm(sortField='id' , sortDir=${reverseSortDir})}">ID</a></th>
+          <th><a th:href="@{/rentals/showReturnForm(sortField='make' , sortDir=${reverseSortDir})}">Make</a></th>
+          <th><a th:href="@{/rentals/showReturnForm(sortField='model' , sortDir=${reverseSortDir})}">Model</a></th>
+          <th><a th:href="@{/rentals/showReturnForm(sortField='year' , sortDir=${reverseSortDir})}">Year</a></th>
 
           <th>Action</th>
         </tr>

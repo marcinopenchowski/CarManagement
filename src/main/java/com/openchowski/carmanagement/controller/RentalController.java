@@ -52,14 +52,23 @@ public class RentalController {
     }
 
     @GetMapping("/showAddForm")
-    public String showAddForm(Model model){
+    public String showAddForm(
+            Model model,
+            @RequestParam(value = "carSortField", required = false, defaultValue = "id") String carSortField,
+            @RequestParam(value = "carSortDir", required = false, defaultValue = "asc") String carSortDir,
+            @RequestParam(value = "employeeSortField", required = false, defaultValue = "id") String employeeSortField,
+            @RequestParam(value = "employeeSortDir", required = false, defaultValue = "asc") String employeeSortDir
+    ){
 
         Rental rental = new Rental();
 
-        List<Car> carList = carService.showAvailable();
+        List<Car> carList = carService.showAvailable(carSortField, carSortDir);
 
-        List<Employee> employeeList = employeeService.findAll("id", "asc");
+        List<Employee> employeeList = employeeService.findAll(employeeSortField, employeeSortDir);
 
+
+        model.addAttribute("reverseCarSortDir", carSortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("reverseEmployeeSortDir", employeeSortDir.equals("asc") ? "desc" : "asc");
         model.addAttribute("rental", rental);
         model.addAttribute("cars", carList);
         model.addAttribute("employees", employeeList);
@@ -70,17 +79,24 @@ public class RentalController {
 
     @GetMapping("/showUpdateForm")
     public String showUpdateForm(
+            @RequestParam(value = "carSortField", required = false, defaultValue = "id") String carSortField,
+            @RequestParam(value = "carSortDir", required = false, defaultValue = "ASC") String carSortDir,
+            @RequestParam(value = "employeeSortField", required = false, defaultValue = "id") String employeeSortField,
+            @RequestParam(value = "employeeSortDir", required = false, defaultValue = "ASC") String employeeSortDir,
             @RequestParam("rentalId") int id,
             Model model){
 
+
         Rental rental = rentalService.findById(id);
 
-        List<Car> carList = carService.showAvailable();
+        List<Car> carList = carService.showAvailable(carSortField, carSortDir);
 
         carList.add(rental.getCar());
 
-        List<Employee> employeeList = employeeService.findAll("id", "asc");
+        List<Employee> employeeList = employeeService.findAll(employeeSortField, employeeSortDir);
 
+        model.addAttribute("reverseCarSortDir", carSortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("reverseEmployeeSortDir", employeeSortDir.equals("asc") ? "desc" : "asc");
         model.addAttribute("rental", rental);
         model.addAttribute("cars", carList);
         model.addAttribute("employees", employeeList);
@@ -169,10 +185,14 @@ public class RentalController {
     }
 
     @GetMapping("/showReturnForm")
-    public String showReturnForm(Model model){
+    public String showReturnForm(
+            Model model,
+            @RequestParam(value = "sortField", required = false, defaultValue = "id") String sortField,
+            @RequestParam(value = "sortDir", required = false, defaultValue = "ASC") String sortDir
+    ){
 
-        List<Car> carList = carService.showUnavailable();
-
+        List<Car> carList = carService.showUnavailable(sortField, sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         model.addAttribute("cars", carList);
 
 
@@ -198,5 +218,6 @@ public class RentalController {
 
         return "redirect:/rentals/list";
     }
+
 
 }

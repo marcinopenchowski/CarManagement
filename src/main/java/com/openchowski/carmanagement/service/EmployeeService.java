@@ -21,10 +21,8 @@ public class EmployeeService {
     }
 
     public List<Employee> findAll(String sortField, String sortDirection){
-        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
-                Sort.by(sortField).descending();
 
-        List<Employee> employeeList = employeeRepo.findAll(sort);
+        List<Employee> employeeList = employeeRepo.findAll(createSort(sortField, sortDirection));
 
         return employeeList;
     }
@@ -63,5 +61,14 @@ public class EmployeeService {
         return employeeList;
     }
 
+    private Sort createSort(String sortField, String sortDirection){
+
+        Sort sort = sortDirection.equalsIgnoreCase(
+                Sort.Direction.ASC.name())
+                ? Sort.by(sortField).ascending()
+                : Sort.by(sortField).descending();
+
+        return sort;
+    }
 
 }

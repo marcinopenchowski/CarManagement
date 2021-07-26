@@ -12,11 +12,11 @@ public interface CarRepo extends JpaRepository<Car, Integer> {
     @Query("select c from Car c where c.make like %?1% or c.model like %?1%")
     List<Car> searchCar(String searchName);
 
-    @Query("select c from Car c where c.status like 'available' ")
-    List<Car> showAvailable();
+    @Query("select c from Car c where c.status like 'available'")
+    List<Car> showAvailable(String sortField, String sortDirection);
 
-    @Query("select c from Car c where c.status like 'unavailable' ")
-    List<Car> showUnavailable();
+    @Query("select c from Car c where c.status like 'unavailable'")
+    List<Car> showUnavailable(String sortField, String sortDirection);
 
     // add converted int value (ID and YEAR)
 

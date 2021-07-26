@@ -2,12 +2,12 @@ package com.openchowski.carmanagement.service;
 
 import com.openchowski.carmanagement.dao.CarRepo;
 import com.openchowski.carmanagement.entity.Car;
+import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CarService {
@@ -21,16 +21,11 @@ public class CarService {
 
     public List<Car> findAll(String sortField, String sortDirection){
 
-        // add sorting
-        Sort sort = sortDirection.equalsIgnoreCase(
-                Sort.Direction.ASC.name())
-                        ? Sort.by(sortField).ascending()
-                        : Sort.by(sortField).descending();
-
-        List<Car> carList = carRepo.findAll(sort);
+        List<Car> carList = carRepo.findAll(createSort(sortField, sortDirection));
 
         return carList;
     }
+
 
     public Car findById(int id){
 
@@ -68,16 +63,49 @@ public class CarService {
         return carList;
     }
 
-    public List<Car> showAvailable() {
-        List<Car> carList = carRepo.showAvailable();
+    public List<Car> showAvailable(String sortField, String sortDirection) {
 
-        return carList;
+        List<Car> carList = carRepo.findAll(createSort(sortField, sortDirection));
+
+        List<Car> tempCarList = new ArrayList<>();
+
+        for(Car tempCar : carList){
+
+            if("available".equals(tempCar.getStatus())){
+
+                tempCarList.add(tempCar);
+            }
+
+        }
+
+        return tempCarList;
     }
 
-    public List<Car> showUnavailable() {
-        List<Car> carList = carRepo.showUnavailable();
+    public List<Car> showUnavailable(String sortField, String sortDirection) {
+        List<Car> carList = carRepo.findAll(createSort(sortField, sortDirection));
 
-        return carList;
+        List<Car> tempCarList = new ArrayList<>();
+
+        for(Car tempCar : carList){
+
+            if("unavailable".equals(tempCar.getStatus())){
+
+                tempCarList.add(tempCar);
+            }
+
+        }
+
+        return tempCarList;
+    }
+
+    private Sort createSort(String sortField, String sortDirection){
+
+        Sort sort = sortDirection.equalsIgnoreCase(
+                Sort.Direction.ASC.name())
+                ? Sort.by(sortField).ascending()
+                : Sort.by(sortField).descending();
+
+        return sort;
     }
 
 

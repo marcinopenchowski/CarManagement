@@ -42,10 +42,10 @@ function toogle(source){
       <thead class="thead-dark">
         <tr>
           <th><input type="checkbox" onclick="toogle(this);"></th>
-          <th><a th:href="@{'/cars/list/' + '?sortField=id&sortDir=' + ${reverseSortDir}}">ID</a></th>
-          <th><a th:href="@{'/cars/list/' + '?sortField=make&sortDir=' + ${reverseSortDir}}">Make</a></th>
-          <th><a th:href="@{'/cars/list/' + '?sortField=model&sortDir=' + ${reverseSortDir}}">Model</a></th>
-          <th><a th:href="@{'/cars/list/' + '?sortField=year&sortDir=' + ${reverseSortDir}}">Year</a></th>
+          <th><a th:href="@{/cars/list(sortField='id' , sortDir=${reverseSortDir})}">ID</a></th>
+          <th><a th:href="@{/cars/list(sortField='make' , sortDir=${reverseSortDir})}">Make</a></th>
+          <th><a th:href="@{/cars/list(sortField='model' , sortDir=${reverseSortDir})}">Model</a></th>
+          <th><a th:href="@{/cars/list(sortField='year' , sortDir=${reverseSortDir})}">Year</a></th>
 
           <th>Action</th>
         </tr>
