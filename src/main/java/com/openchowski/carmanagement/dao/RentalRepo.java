@@ -3,9 +3,11 @@ package com.openchowski.carmanagement.dao;
 import com.openchowski.carmanagement.entity.Rental;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface RentalRepo extends JpaRepository<Rental, Integer> {
 
     @Query("select r from Rental r where r.status like %?1%")

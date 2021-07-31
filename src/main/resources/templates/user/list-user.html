@@ -7,7 +7,7 @@
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <title>Car List</title>
+  <title>Users List</title>
 
 </head>
 
@@ -25,22 +25,21 @@ function toogle(source){
 
 <div class="container">
   <div class="position-absolute top-0 end-0 mt-2 me-2">
-    <span th:text="'Username: ' + ${#authentication.getName()}"></span>
     <form th:action="@{/logout}" th:method="POST">
       <input class = "pull-right" th:type="submit" th:value="logout" />
     </form>
   </div>
   <a href="/">Back to Home Page</a>
   <br><br>
-  <h3>Car List</h3>
+  <h3>Users List</h3>
   <hr>
-  <form th:action="@{/cars/search}"  method="get">
+  <form th:action="@{/users/search}"  method="get">
     <input type="text" name="searchName" class="form-control mb-4 col-4"  placeholder="Search">
     <input type="submit" class="btn btn-dark" value="Search" />
   </form>
   <br>
-  <form th:action="@{/cars/delete}" method="POST">
-  <a th:href="@{/cars/showAddForm}" class="btn btn-primary">Add</a>
+  <form th:action="@{/users/delete}" method="POST">
+  <a th:href="@{/users/showAddForm}" class="btn btn-primary">Add</a>
   <button type="submit" class="btn btn-primary">Delete</button>
     <br>
     <br>
@@ -48,26 +47,25 @@ function toogle(source){
       <thead class="thead-dark">
         <tr>
           <th><input type="checkbox" onclick="toogle(this);"></th>
-          <th><a th:href="@{/cars/list(sortField='id' , sortDir=${reverseSortDir})}">ID</a></th>
-          <th><a th:href="@{/cars/list(sortField='make' , sortDir=${reverseSortDir})}">Make</a></th>
-          <th><a th:href="@{/cars/list(sortField='model' , sortDir=${reverseSortDir})}">Model</a></th>
-          <th><a th:href="@{/cars/list(sortField='year' , sortDir=${reverseSortDir})}">Year</a></th>
+          <th><a th:href="@{/users/list(sortField='id' , sortDir=${reverseSortDir})}">Id</a></th>
+          <th><a th:href="@{/users/list(sortField='username' , sortDir=${reverseSortDir})}">Username</a></th>
+          <th><a th:href="@{/users/list(sortField='password' , sortDir=${reverseSortDir})}">Role</a></th>
+
 
           <th>Action</th>
         </tr>
       </thead>
 
       <tbody>
-        <tr class="table-row" th:each="tempCar : ${cars}">
+        <tr class="table-row" th:each="tempUser : ${users}">
           <td>
-          <input type = "checkbox" th:name="idChecked" th:value="${tempCar.id}" />
+          <input type = "checkbox" th:name="idChecked" th:value="${tempUser.id}" />
           </td>
-          <td th:text="${tempCar.id}"/>
-          <td th:text="${tempCar.make}" />
-          <td th:text="${tempCar.model}" />
-          <td th:text="${tempCar.year}" />
+          <td th:text="${tempUser.id}"/>
+          <td th:text="${tempUser.username}"/>
+          <td th:text="${tempUser.authorityList}" />
           <td>
-            <a th:href="@{/cars/showUpdateForm(carId=${tempCar.id})}" class="btn btn-warning">Edit</a>
+            <a th:href="@{/users/showUpdateForm(userId=${tempUser.id})}" class="btn btn-warning">Edit</a>
           </td>
         </tr>
 

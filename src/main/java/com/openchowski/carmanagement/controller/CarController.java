@@ -27,7 +27,7 @@ public class CarController {
     public String showAll(
             Model model,
             @RequestParam(value = "sortField", required = false, defaultValue = "id") String sortField,
-            @RequestParam(value = "sortDir", required = false, defaultValue = "ASC") String sortDir
+            @RequestParam(value = "sortDir", required = false, defaultValue = "asc") String sortDir
     ){
 
         model.addAttribute("sortField", sortField);

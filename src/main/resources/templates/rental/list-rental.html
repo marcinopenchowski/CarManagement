@@ -23,6 +23,11 @@
 
 </script>
 <div class="container">
+  <div class="position-absolute top-0 end-0 mt-2 me-2">
+  <form th:action="@{/logout}" th:method="POST">
+    <input class = "pull-right" th:type="submit" th:value="logout" />
+  </form>
+  </div>
   <a href="/">Back to Home Page</a>
   <br><br>
   <h3>Rental List</h3>
