@@ -14,25 +14,35 @@
 <body>
 <div class="container">
   <div class="position-absolute top-0 end-0 mt-2 me-2">
+    <span th:text="'Username: ' + ${#authentication.getName()}"></span>
     <form th:action="@{/logout}" th:method="POST">
       <input class = "pull-right" th:type="submit" th:value="logout" />
     </form>
     <a href="/users/showChangePasswordForm" >Change password</a>
   </div>
   <h1 class = h1>Car Management</h1>
+  <br>
   <hr>
-  <a href="/employees/list" class="btn btn-primary">Display Employees List</a> ||
-  <a href="/employees/showAddForm" class="btn btn-success">Add a Employee</a>
-  <br><br>
-  <a href="/cars/list" class="btn btn-primary" >Display Cars List</a> ||
-  <a href="/cars/showAddForm" class="btn btn-success">Add a Car</a>
-  <br><br>
-  <a href="/rentals/list" class="btn btn-primary" >Display Rental List</a> ||
-  <a href="/rentals/showAddForm" class="btn btn-success">Pick up Car</a> ||
-  <a href="/rentals/showReturnForm" class="btn btn-secondary">Return a Car</a>
-  <br><br>
-  <a href="/users/list" class="btn btn-secondary">Display Users</a>
+  <a href="/employees/list" class="btn btn-primary">Display Employees List</a>
+  <security sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
+  <a href="/employees/showAddForm" class="btn btn-success"  >Add a Employee</a>
+  </security>
 
+  <br><br>
+  <a href="/cars/list" class="btn btn-primary" >Display Cars List</a>
+  <security sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
+  <a href="/cars/showAddForm" class="btn btn-success">Add a Car</a>
+  </security>
+
+  <br><br>
+  <a href="/rentals/list" class="btn btn-primary" >Display Rental List</a>
+  <a href="/rentals/showAddForm" class="btn btn-success">Pick up Car</a>
+  <a href="/rentals/showReturnForm" class="btn btn-secondary">Return a Car</a>
+
+  <br><br>
+  <security sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
+  <a href="/users/list" class="btn btn-secondary">Display Users</a>
+  </security>
 
 </div>
 </body>

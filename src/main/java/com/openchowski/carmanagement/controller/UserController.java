@@ -29,7 +29,7 @@ public class UserController {
 
     @GetMapping("/list")
     public String showAll(Model model,
-                          @RequestParam(name = "sortField", required = false, defaultValue = "username") String sortField,
+                          @RequestParam(name = "sortField", required = false, defaultValue = "id") String sortField,
                           @RequestParam(name = "sortDir", required = false, defaultValue = "asc") String sortDir
     ){
 
@@ -61,10 +61,11 @@ public class UserController {
 
     @PostMapping("/save")
     public String save(
-            @ModelAttribute("user") User user
+            @ModelAttribute("user") User user,
+            @RequestParam(value = "idChecked") List<String> idStr
     ){
 
-        userService.save(user);
+        userService.save(user, idStr);
 
         return "redirect:/users/list";
     }
@@ -85,8 +86,10 @@ public class UserController {
     public String showAddForm(Model model){
 
         User user = new User();
+        List<Authority> authorityList = authorityService.findAll();
 
         model.addAttribute("user", user);
+        model.addAttribute("authorities", authorityList);
 
         return "/user/add-user";
     }
@@ -138,22 +141,13 @@ public class UserController {
 
     @PostMapping("/changePassword")
     public String changePassword(
+            @RequestParam(value = "currentPassword") String currentPassword,
             @RequestParam(value = "newPassword") String newPassword
             ){
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        String currentUserName = null;
+        userService.changePassword(currentPassword, newPassword);
 
-        if(principal instanceof UserDetails){
-            currentUserName = ((UserDetails)principal).getUsername();
-        }else{
-            currentUserName = principal.toString();
-        }
-
-        User user = userService.findByUsername(currentUserName);
-        user.setPassword(newPassword);
-        userService.save(user);
-        return "redirect:/users/list";
+        return "redirect:/";
     }
 
 }

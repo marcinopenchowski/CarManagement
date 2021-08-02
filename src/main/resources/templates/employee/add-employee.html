@@ -12,6 +12,13 @@
 
 <body>
   <div class="container">
+    <div class="position-absolute top-0 end-0 mt-2 me-2">
+      <span th:text="'Username: ' + ${#authentication.getName()}"></span>
+      <form th:action="@{/logout}" th:method="POST">
+        <input class = "pull-right" th:type="submit" th:value="logout" />
+      </form>
+      <a href="/users/showChangePasswordForm" >Change password</a>
+    </div>
     <a th:href="@{/}">Back to Home Page</a>
     <br>
     <a th:href="@{/employees/list}">Back to Employees List</a>

@@ -11,7 +11,25 @@
 </head>
 
 <body>
+<script>
+  function toogle(source){
+    var checkboxes = document.querySelectorAll('input[type = "checkbox"]');
+    for(var i = 0; i < checkboxes.length; i++){
+      if(checkboxes[i] != source)
+        checkboxes[i].checked = source.checked;
+    }
+  }
+
+</script>
+
   <div class="container">
+    <div class="position-absolute top-0 end-0 mt-2 me-2">
+      <span th:text="'Username: ' + ${#authentication.getName()}"></span>
+      <form th:action="@{/logout}" th:method="POST">
+        <input class = "pull-right" th:type="submit" th:value="logout" />
+      </form>
+      <a href="/users/showChangePasswordForm" >Change password</a>
+    </div>
     <a th:href="@{/}">Back to Home Page</a>
     <br>
     <a th:href="@{/users/list}">Back to User List</a>
@@ -22,7 +40,32 @@
     <form action="#" th:action="@{/users/save}" th:object="${user}" method="post">
       <input type="hidden" th:field = "*{enabled}" th:value= "true" />
       Username: <input type="text" th:field="*{username}" class="form-control mb-4 col-4">
-      Password: <input type="text" th:field="*{password}" class="form-control mb-4 col-4">
+
+      <table class='table table-bordered table-condensed table-striped table-hover'>
+        <thead class="thead-dark">
+        <tr>
+          <th><input type="checkbox" onclick="toogle(this);"></th>
+          <th>ID</th>
+          <th>Role Name</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr class="table-row" th:each="tempAuthority : ${authorities}">
+          <td>
+            <input type = "checkbox" th:name="idChecked" th:value="${tempAuthority.id}" />
+          </td>
+          <td th:text="${tempAuthority.id}"/>
+          <td th:text="${tempAuthority.authorityName}"/>
+          <td th:text="${tempAuthority.description}" />
+
+        </tr>
+
+        </tbody>
+      </table>
+
+      Password: <input type="password" class="form-control mb-4 col-4" th:field="*{password}">
       <button type="submit">Save</button>
     </form>
   </div>
