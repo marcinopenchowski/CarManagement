@@ -47,6 +47,10 @@ function toogle(source){
     </security>
     <br>
     <br>
+      <div class="alert alert-danger" th:if = "${errors}"}>
+        You cannot remove this car, because it is a rental.
+      </div>
+    <br>
     <table class='table table-bordered table-condensed table-striped table-hover'>
       <thead class="thead-dark">
         <tr>

@@ -1,7 +1,9 @@
 package com.openchowski.carmanagement.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class LoginController {
@@ -11,4 +13,12 @@ public class LoginController {
         return "/security/access-denied";
     }
 
+
+    @GetMapping("/showMyLoginPage")
+    public String showMyLoginPage(){
+        return "/security/login-form";
+    }
+
 }
+
+

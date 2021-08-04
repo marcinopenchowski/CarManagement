@@ -29,8 +29,11 @@
     <form action="#" th:action="@{/cars/save}" th:object="${car}" method="post">
       <input type="hidden" th:field = "*{id}" />
       Make: <input type="text" th:field="*{make}" class="form-control mb-4 col-4" placeholder="Make">
+      <p class="alert alert-danger" th:if="${#fields.hasErrors('make')}" th:errors="*{make}"></p>
       Model: <input type="text" th:field="*{model}" class="form-control mb-4 col-4" placeholder="Model">
+      <p class="alert alert-danger" th:if="${#fields.hasErrors('model')}" th:errors="*{model}"></p>
       Year: <input type="text" th:field="*{year}" class="form-control mb-4 col-4" placeholder="Year">
+      <p class="alert alert-danger" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></p>
       <button type="submit">Save</button>
     </form>
   </div>

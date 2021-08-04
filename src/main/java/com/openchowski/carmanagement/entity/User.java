@@ -1,6 +1,8 @@
 package com.openchowski.carmanagement.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -12,9 +14,13 @@ public class User {
     @Column(name = "id")
     private int id;
 
+    @NotNull(message="Username is required.")
+    @Size(min=1, message="Username is required.")
     @Column(name = "username")
     private String username;
 
+    @NotNull(message="Password is required.")
+    @Size(min=1, message="Password is required.")
     @Column(name = "password")
     private String password;
 

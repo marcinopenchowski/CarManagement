@@ -7,10 +7,13 @@ import com.openchowski.carmanagement.service.CarService;
 import com.openchowski.carmanagement.service.EmployeeService;
 import com.openchowski.carmanagement.service.RentalService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -36,7 +39,7 @@ public class RentalController {
     public String showList(
             Model model,
             @RequestParam(value = "sortField", required = false, defaultValue = "id") String sortField,
-            @RequestParam(value = "sortDir", required = false, defaultValue = "ASC") String sortDir
+            @RequestParam(value = "sortDir", required = false, defaultValue = "asc") String sortDir
             ){
         // create rentalList with sorting
 
@@ -80,9 +83,9 @@ public class RentalController {
     @GetMapping("/showUpdateForm")
     public String showUpdateForm(
             @RequestParam(value = "carSortField", required = false, defaultValue = "id") String carSortField,
-            @RequestParam(value = "carSortDir", required = false, defaultValue = "ASC") String carSortDir,
+            @RequestParam(value = "carSortDir", required = false, defaultValue = "asc") String carSortDir,
             @RequestParam(value = "employeeSortField", required = false, defaultValue = "id") String employeeSortField,
-            @RequestParam(value = "employeeSortDir", required = false, defaultValue = "ASC") String employeeSortDir,
+            @RequestParam(value = "employeeSortDir", required = false, defaultValue = "asc") String employeeSortDir,
             @RequestParam("rentalId") int id,
             Model model){
 
@@ -113,24 +116,25 @@ public class RentalController {
             @ModelAttribute("rental") Rental rental
         ) {
 
-            rental.setPickUpDate(new Date());
+        rental.setPickUpDate(new Date());
 
-            rental.setCar(carService.findById(idCar));
-            rental.setEmployee(employeeService.findById(idEmployee));
-            carService.findById(idCar).setStatus("unavailable");
+        rental.setCar(carService.findById(idCar));
+        rental.setEmployee(employeeService.findById(idEmployee));
+        carService.findById(idCar).setStatus("unavailable");
 
 
-            rentalService.save(rental);
-            return "redirect:/rentals/list";
+        rentalService.save(rental);
+        return "redirect:/rentals/list";
+
         }
-
 
     @PostMapping("/edit")
     public String editRental(
             @RequestParam("idCheckedCar") int idCar,
             @RequestParam("idCheckedEmployee") int idEmployee,
             @RequestParam("rentalId") int idRental,
-            @ModelAttribute("rental") Rental rental
+            @Valid @ModelAttribute("rental") Rental rental,
+            BindingResult bindingResult
     ) {
 
         Car previousCar = carService.findById(rentalService.findById(idRental).getCar().getId());
@@ -138,13 +142,20 @@ public class RentalController {
         previousCar.setStatus("available");
 
 
-
         rental.setCar(carService.findById(idCar));
         rental.setEmployee(employeeService.findById(idEmployee));
         carService.findById(idCar).setStatus("unavailable");
 
-        rentalService.save(rental);
-        return "redirect:/rentals/list";
+        if(bindingResult.hasFieldErrors("pickUpDate") && bindingResult.hasFieldErrors("returnDate")){
+            return "redirect:/rentals/showUpdateForm?rentalId=" + idRental + "&errorPickUpDate=wrongPickUpDate&errorReturnDate=wrongReturnDate";
+        }else if(bindingResult.hasFieldErrors("returnDate")) {
+            return "redirect:/rentals/showUpdateForm?rentalId=" + idRental + "&errorReturnDate=wrongReturnDate";
+        }else if(bindingResult.hasFieldErrors("pickUpDate")){
+            return "redirect:/rentals/showUpdateForm?rentalId=" + idRental + "&errorPickUpDate=wrongPickUpDate";
+        }else{
+            rentalService.save(rental);
+            return "redirect:/rentals/list";
+        }
     }
 
     @PostMapping("/delete")
@@ -188,7 +199,7 @@ public class RentalController {
     public String showReturnForm(
             Model model,
             @RequestParam(value = "sortField", required = false, defaultValue = "id") String sortField,
-            @RequestParam(value = "sortDir", required = false, defaultValue = "ASC") String sortDir
+            @RequestParam(value = "sortDir", required = false, defaultValue = "asc") String sortDir
     ){
 
         List<Car> carList = carService.showUnavailable(sortField, sortDir);

@@ -3,6 +3,8 @@ package com.openchowski.carmanagement.entity;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -21,6 +23,7 @@ public class Rental {
     @Column(name = "pick_up_date")
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss:s")
+    @NotNull(message = "Date cannot be null")
     private Date pickUpDate;
 
 

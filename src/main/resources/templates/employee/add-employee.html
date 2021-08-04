@@ -29,10 +29,15 @@
     <form action="#" th:action="@{/employees/save}" th:object="${employee}" method="post">
       <input type="hidden" th:field = "*{id}" />
       First Name: <input type="text" th:field="*{firstName}" class="form-control mb-4 col-4" placeholder="First name">
+      <p class="alert alert-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
       Last Name: <input type="text" th:field="*{lastName}" class="form-control mb-4 col-4" placeholder="Last Name">
+      <p class="alert alert-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></p>
       Email: <input type="text" th:field="*{email}" class="form-control mb-4 col-4" placeholder="Email">
+      <p class="alert alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
       Phone Number: <input type="text" th:field="*{phoneNumber}" class="form-control mb-4 col-4" placeholder="Phone Number">
+      <p class="alert alert-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></p>
       Job Title: <input type="text" th:field="*{jobTitle}" class="form-control mb-4 col-4" placeholder="Job Title">
+      <p class="alert alert-danger" th:if="${#fields.hasErrors('jobTitle')}" th:errors="*{jobTitle}"></p>
 
       <button type="submit">Save</button>
     </form>

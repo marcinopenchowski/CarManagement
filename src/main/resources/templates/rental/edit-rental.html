@@ -21,7 +21,6 @@
   </div>
   <a th:href="@{/}">Back to Home Page</a>
   <br>
-  <hr>
   <h1 class="h1">Pick up Car</h1>
   <hr>
   <form action="#" th:action="@{/rentals/edit(rentalId=${rental.getId()})}" th:object="${rental}" method="post">
@@ -31,10 +30,18 @@
     <!-- Add Pick up date and return date -->
 
     <h3 class="h3">Pick Up Date</h3>
-    <input type="text" th:field="*{pickUpDate}" th:value="${#dates.format(rental.pickUpDate, 'dd/MM/yyyy HH:mm:ss:s')}" class="form-control mb-4 col-4" placeholder="dd/MM/yyyy h:mm ">
+    <input type="text" th:field="*{pickUpDate}" th:value="${#dates.format(rental.pickUpDate, 'dd/MM/yyyy HH:mm:ss:s')}" class="form-control mb-4 col-4" placeholder="dd/MM/yyyy HH:mm:ss:S ">
+    <div class="alert alert-danger" th:if = "${param.errorPickUpDate != null}"}>
+      Wrong date! (dd/MM/yyyy HH:mm:ss:S)
+    </div>
     <br>
-    <h3 th:if="*{returnDate != null}" class="h3">Return Date</h3>
-    <input type="text" th:if="*{returnDate != null}" th:field="*{returnDate}" th:value="${#dates.format(rental.returnDate, 'dd/MM/yyyy HH:mm:ss:s')}" class="form-control mb-4 col-4" placeholder="dd/MM/yyyy h:mm">
+    <div th:if="*{returnDate != null}">
+      <h3 class="h3">Return Date</h3>
+      <input type="text" th:field="*{returnDate}" th:value="${#dates.format(rental.returnDate, 'dd/MM/yyyy HH:mm:ss:s')}" class="form-control mb-4 col-4" placeholder="dd/MM/yyyy HH:mm:ss:S">
+      <div class="alert alert-danger" th:if = "${param.errorReturnDate != null}"}>
+        Wrong date! (dd/MM/yyyy HH:mm:ss:S)
+      </div>
+    </div>
     <br>
     <hr>
     <h2 class="h2">Choose Car</h2>
@@ -43,10 +50,10 @@
       <thead class="thead-dark">
       <tr>
         <th></th>
-        <th><a th:href="@{'/rentals/showUpdateForm/' + '?carSortField=id&carSortDir=' + ${reverseSortDir}}">ID</a></th>
-        <th><a th:href="@{'/rentals/showUpdateForm/' + '?carSortField=make&carSortDir=' + ${reverseSortDir}}">Make</a></th>
-        <th><a th:href="@{'/rentals/showUpdateForm/' + '?carSortField=model&carSortDir=' + ${reverseSortDir}}">Model</a></th>
-        <th><a th:href="@{'/rentals/showUpdateForm/' + '?carSortField=year&carSortDir=' + ${reverseSortDir}}">Year</a></th>
+        <th><a th:href="@{/rentals/showUpdateForm(rentalId=${rental.getId()}, carSortField='id', carSortDir=${reverseCarSortDir})}">ID</a></th>
+        <th><a th:href="@{/rentals/showUpdateForm(rentalId=${rental.getId()}, carSortField='make', carSortDir=${reverseCarSortDir})}">Make</a></th>
+        <th><a th:href="@{/rentals/showUpdateForm(rentalId=${rental.getId()}, carSortField='model' , carSortDir=${reverseCarSortDir})}">Model</a></th>
+        <th><a th:href="@{/rentals/showUpdateForm(rentalId=${rental.getId()}, carSortField='year' , carSortDir=${reverseCarSortDir})}">Year</a></th>
       </tr>
       </thead>
 
@@ -74,12 +81,12 @@
       <thead class="thead-dark">
       <tr>
         <th></th>
-        <th><a th:href="@{'/employees/list/' + '?sortField=id&sortDir=' + ${reverseSortDir}}">ID</a></th>
-        <th><a th:href="@{'/employees/list/' + '?sortField=firstName&sortDir=' + ${reverseSortDir}}">Fist Name</a></th>
-        <th><a th:href="@{'/employees/list/' + '?sortField=lastName&sortDir=' + ${reverseSortDir}}">Last Name</a></th>
-        <th><a th:href="@{'/employees/list/' + '?sortField=Email&sortDir=' + ${reverseSortDir}}">Email</a></th>
-        <th><a th:href="@{'/employees/list/' + '?sortField=phoneNumber&sortDir=' + ${reverseSortDir}}">Phone Number</a></th>
-        <th><a th:href="@{'/employees/list/' + '?sortField=jobTitle&sortDir=' + ${reverseSortDir}}">Job Title</a></th>
+        <th><a th:href="@{/rentals/showUpdateForm(rentalId=${rental.getId()}, employeeSortField='id' , employeeSortDir=${reverseEmployeeSortDir})}">ID</a></th>
+        <th><a th:href="@{/rentals/showUpdateForm(rentalId=${rental.getId()}, employeeSortField='firstName' , employeeSortDir=${reverseEmployeeSortDir})}">Fist Name</a></th>
+        <th><a th:href="@{/rentals/showUpdateForm(rentalId=${rental.getId()}, employeeSortField='lastName' , employeeSortDir=${reverseEmployeeSortDir})}">Last Name</a></th>
+        <th><a th:href="@{/rentals/showUpdateForm(rentalId=${rental.getId()}, employeeSortField='email' , employeeSortDir=${reverseEmployeeSortDir})}">Email</a></th>
+        <th><a th:href="@{/rentals/showUpdateForm(rentalId=${rental.getId()}, employeeSortField='phoneNumber' , employeeSortDir=${reverseEmployeeSortDir})}">Phone Number</a></th>
+        <th><a th:href="@{/rentals/showUpdateForm(rentalId=${rental.getId()}, employeeSortField='jobTitle' , employeeSortDir=${reverseEmployeeSortDir})}">Job Title</a></th>
       </tr>
       </thead>
 

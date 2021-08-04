@@ -1,6 +1,10 @@
 package com.openchowski.carmanagement.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "car")
@@ -11,12 +15,18 @@ public class Car {
     @Column(name= "id")
     private int id;
 
+    @NotNull(message="Make is required.")
+    @Size(min=1, message="Make is required.")
     @Column(name= "make")
     private String make;
 
+    @NotNull(message="Model is required.")
+    @Size(min=1, message="Model is required.")
     @Column(name= "model")
     private String model;
 
+    @Min(value = 1000, message = "Year should be valid.")
+    @Max(value = 2022, message = "Year should be valid.")
     @Column(name= "year")
     private int year;
 

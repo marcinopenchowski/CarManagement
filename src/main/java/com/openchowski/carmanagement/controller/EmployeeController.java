@@ -3,10 +3,15 @@ package com.openchowski.carmanagement.controller;
 import com.openchowski.carmanagement.entity.Employee;
 import com.openchowski.carmanagement.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.monitor.StringMonitor;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -23,6 +28,7 @@ public class EmployeeController {
     @GetMapping("/list")
     public String showAll(
             Model model,
+            @RequestParam(value = "errors", required = false) String errors,
             @RequestParam(value = "sortField", required = false, defaultValue = "id") String sortField,
             @RequestParam(value = "sortDir", required = false, defaultValue = "asc") String sortDir
 
@@ -31,7 +37,7 @@ public class EmployeeController {
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-
+        model.addAttribute("errors", errors);
 
 
         List<Employee> employeeList = employeeService.findAll(sortField, sortDir);
@@ -41,6 +47,11 @@ public class EmployeeController {
         return "employee/list-employee";
     }
 
+    @InitBinder
+    public void initBinder(WebDataBinder dataBinder){
+        StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
+        dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
+    }
 
     @GetMapping("/showAddForm")
     public String showAddForm(Model model){
@@ -63,22 +74,31 @@ public class EmployeeController {
     }
 
     @PostMapping("/save")
-    public String saveEmployee(@ModelAttribute("employee") Employee employee){
+    public String saveEmployee(@Valid @ModelAttribute("employee") Employee employee,
+                               BindingResult bindingResult
+                               ){
 
-        employeeService.save(employee);
-
-        return "redirect:/employees/list";
+        if(bindingResult.hasErrors()){
+            return "employee/add-employee";
+        }else {
+            employeeService.save(employee);
+            return "redirect:/employees/list";
+        }
     }
 
     @PostMapping("/delete")
     public String deleteEmployee(@RequestParam(value = "idChecked", required = false) List<String> id){
 
-        if(id != null) {
-            for (String tempIdStr : id) {
-                int tempId = Integer.parseInt(tempIdStr);
-                employeeService.deleteById(tempId);
-            }
+        try {
+            if (id != null) {
+                for (String tempIdStr : id) {
+                    int tempId = Integer.parseInt(tempIdStr);
+                    employeeService.deleteById(tempId);
+                }
 
+            }
+        }catch (Exception e){
+            return "redirect:/employees/list?errors=carIsRented";
         }
 
         return "redirect:/employees/list";

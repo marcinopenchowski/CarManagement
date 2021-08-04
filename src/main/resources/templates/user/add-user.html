@@ -40,6 +40,7 @@
     <form action="#" th:action="@{/users/save}" th:object="${user}" method="post">
       <input type="hidden" th:field = "*{enabled}" th:value= "true" />
       Username: <input type="text" th:field="*{username}" class="form-control mb-4 col-4">
+      <p class="alert alert-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
 
       <table class='table table-bordered table-condensed table-striped table-hover'>
         <thead class="thead-dark">
@@ -66,6 +67,7 @@
       </table>
 
       Password: <input type="password" class="form-control mb-4 col-4" th:field="*{password}">
+      <p class="alert alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
       <button type="submit">Save</button>
     </form>
   </div>

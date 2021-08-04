@@ -6,12 +6,16 @@ import com.openchowski.carmanagement.service.AuthorityService;
 import com.openchowski.carmanagement.service.UserService;
 import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -59,15 +63,31 @@ public class UserController {
         return "user/list-user";
     }
 
+    @InitBinder
+    public void initBinder(WebDataBinder dataBinder){
+        StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
+        dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
+    }
+
+
     @PostMapping("/save")
     public String save(
-            @ModelAttribute("user") User user,
-            @RequestParam(value = "idChecked") List<String> idStr
+            @Valid @ModelAttribute("user") User user,
+            BindingResult bindingResult,
+            Model model,
+            @RequestParam(value = "idChecked", required = false, defaultValue = "2") List<String> idStr
     ){
 
-        userService.save(user, idStr);
+        if(bindingResult.hasErrors()){
+            List<Authority> authorityList = authorityService.findAll();
+            model.addAttribute("authorities", authorityList);
 
-        return "redirect:/users/list";
+            return "user/add-user";
+        }else {
+            userService.save(user, idStr);
+
+            return "redirect:/users/list";
+        }
     }
 
     @PostMapping("/delete")
@@ -120,7 +140,9 @@ public class UserController {
     }
 
     @GetMapping("/showChangePasswordForm")
-    public String showChangePasswordForm(Model model){
+    public String showChangePasswordForm(Model model,
+        @RequestParam(value = "errors", required = false) String errors
+    ){
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -135,6 +157,7 @@ public class UserController {
         User user = userService.findByUsername(currentUserName);
 
         model.addAttribute("user", user);
+        model.addAttribute("errors", errors);
 
         return "user/change-password";
     }
@@ -145,8 +168,11 @@ public class UserController {
             @RequestParam(value = "newPassword") String newPassword
             ){
 
-        userService.changePassword(currentPassword, newPassword);
-
+        try {
+            userService.changePassword(currentPassword, newPassword);
+        }catch (RuntimeException e){
+            return "redirect:/users/showChangePasswordForm?errors=wrongCurrentPassword";
+        }
         return "redirect:/";
     }
 

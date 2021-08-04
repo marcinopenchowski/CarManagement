@@ -1,12 +1,17 @@
 package com.openchowski.carmanagement.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.sql.DataSource;
@@ -54,6 +59,17 @@ public class AppConfig {
 
         return securityDataSource;
     }
+
+    @Bean
+    public ResourceBundleMessageSource resourceBundleMessageSource(){
+
+        var source = new ResourceBundleMessageSource();
+        source.setBasename("classpath:message.properties");
+        source.setUseCodeAsDefaultMessage(true);
+
+        return source;
+    }
+
 
     private int getIntPoperty(String propName){
         String propVal = environment.getProperty(propName);

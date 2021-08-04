@@ -2,6 +2,7 @@ package com.openchowski.carmanagement.entity;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.List;
 
 @Entity
@@ -13,18 +14,29 @@ public class Employee {
     @Column(name = "id")
     private int id;
 
+
+    @NotNull(message="First Name is required.")
+    @Size(min=1, message="First Name is required.")
     @Column(name = "first_name")
     private String firstName;
 
+    @NotNull(message="Last Name is required.")
+    @Size(min=1, message="Last Name is required.")
     @Column(name = "last_name")
     private String lastName;
 
+    @NotNull(message="Email is required.")
+    @Email(message = "Email should be valid.")
     @Column(name = "email")
     private String email;
 
+    @NotNull(message="Job Title is required.")
+    @Size(min=1, message="Job Title is required.")
     @Column(name = "job_title")
     private String jobTitle;
 
+    @Min(value = 100000000, message = "Phone number should be valid.")
+    @Max(value = 999999999, message = "Phone number should be valid.")
     @Column(name = "phone_number")
     private int phoneNumber;
 
