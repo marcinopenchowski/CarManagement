@@ -1,21 +1,21 @@
 package com.openchowski.carmanagement.controller;
 
 import com.openchowski.carmanagement.entity.Car;
-import com.openchowski.carmanagement.entity.Employee;
+import com.openchowski.carmanagement.exporter.CarExcelExporter;
 import com.openchowski.carmanagement.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.sql.SQLIntegrityConstraintViolationException;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -23,6 +23,7 @@ import java.util.List;
 public class CarController {
 
     CarService carService;
+
 
     @Autowired
     public CarController(CarService carService) {
@@ -117,7 +118,7 @@ public class CarController {
             @RequestParam(value = "searchName", required = false) String searchName,
             Model model
             ){
-        if(searchName.isBlank()){
+        if(searchName == null){
             return "redirect:/cars/list";
         }
 
@@ -125,6 +126,25 @@ public class CarController {
         model.addAttribute("cars", carList);
 
         return "car/list-car";
+    }
+
+    @GetMapping("/export")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+
+        response.setContentType("text/xlsx");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormat.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename = cars_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        List<Car> carList = carService.findAll("id", "asc");
+
+        CarExcelExporter carExcelExporter = new CarExcelExporter(carList);
+
+        carExcelExporter.export(response);
+
     }
 
 }

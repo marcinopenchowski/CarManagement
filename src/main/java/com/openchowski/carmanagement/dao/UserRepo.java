@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface UserRepo extends JpaRepository<User, Integer> {
 
-    @Query("select u from User u where u.username like %?1%")
+    @Query("select u from User u where concat(u.id, u.username) like %?1%")
     List<User> search(String searchName);
 
     @Query("select u from User u where u.username like ?1")

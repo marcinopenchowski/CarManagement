@@ -2,6 +2,7 @@ package com.openchowski.carmanagement.controller;
 
 import com.openchowski.carmanagement.entity.Authority;
 import com.openchowski.carmanagement.entity.User;
+import com.openchowski.carmanagement.exporter.UserExcelExporter;
 import com.openchowski.carmanagement.service.AuthorityService;
 import com.openchowski.carmanagement.service.UserService;
 import org.springframework.aop.scope.ScopedProxyUtils;
@@ -15,7 +16,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -174,6 +180,25 @@ public class UserController {
             return "redirect:/users/showChangePasswordForm?errors=wrongCurrentPassword";
         }
         return "redirect:/";
+    }
+
+    @GetMapping("/export")
+    public void ExportToExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("text/xlsx");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormat.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename = users_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        List<User> userList = userService.findAll("id", "asc");
+
+        UserExcelExporter userExcelExporter = new UserExcelExporter(userList);
+
+        userExcelExporter.export(response);
+
+
     }
 
 }

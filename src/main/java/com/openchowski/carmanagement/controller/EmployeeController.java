@@ -1,6 +1,9 @@
 package com.openchowski.carmanagement.controller;
 
+import com.openchowski.carmanagement.entity.Car;
 import com.openchowski.carmanagement.entity.Employee;
+import com.openchowski.carmanagement.exporter.CarExcelExporter;
+import com.openchowski.carmanagement.exporter.EmployeeExcelExporter;
 import com.openchowski.carmanagement.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -11,7 +14,12 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.management.monitor.StringMonitor;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -117,4 +125,22 @@ public class EmployeeController {
         return "employee/list-employee";
     }
 
+    @GetMapping("/export")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+
+        response.setContentType("text/xlsx");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormat.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename = employees_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        List<Employee> employeeList = employeeService.findAll("id", "asc");
+
+        EmployeeExcelExporter excelExporter = new EmployeeExcelExporter(employeeList);
+
+        excelExporter.export(response);
+
+    }
 }

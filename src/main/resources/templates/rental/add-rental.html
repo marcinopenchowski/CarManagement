@@ -23,7 +23,10 @@
     <br>
     <a th:href="@{/rentals/list}">Back to Rental List</a>
     <br>
-    <hr>
+    <br>
+    <div class="alert alert-danger" th:if = "${param.error != null}"}>
+      Select Car and Employee.
+    </div>
     <h1 class="h1">Pick up Car</h1>
     <hr>
     <form action="#" th:action="@{/rentals/save}" th:object="${rental}" method="post">

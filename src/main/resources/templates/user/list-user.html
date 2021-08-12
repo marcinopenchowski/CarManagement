@@ -40,7 +40,9 @@ function toogle(source){
     <input type="submit" class="btn btn-dark" value="Search" />
   </form>
   <br>
-
+  <security sec:authorize="hasAnyRole('MANAGER', 'ADMIN')">
+  <a th:href="@{/users/export}" class="btn btn-primary">Export To Excel</a>
+  </security>
   <form th:action="@{/users/delete}" method="POST">
     <security sec:authorize="hasRole('MANAGER')">
       <a th:href="@{/users/showAddForm}" class="btn btn-primary">Add</a>

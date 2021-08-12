@@ -3,6 +3,7 @@ package com.openchowski.carmanagement.controller;
 import com.openchowski.carmanagement.entity.Car;
 import com.openchowski.carmanagement.entity.Employee;
 import com.openchowski.carmanagement.entity.Rental;
+import com.openchowski.carmanagement.exporter.RentalExcelExporter;
 import com.openchowski.carmanagement.service.CarService;
 import com.openchowski.carmanagement.service.EmployeeService;
 import com.openchowski.carmanagement.service.RentalService;
@@ -13,7 +14,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -111,50 +116,58 @@ public class RentalController {
 
     @PostMapping("/save")
     public String saveRental(
-            @RequestParam("idCheckedCar") int idCar,
-            @RequestParam("idCheckedEmployee") int idEmployee,
+            @RequestParam(value = "idCheckedCar", required = false) Integer idCar,
+            @RequestParam(value = "idCheckedEmployee", required = false) Integer idEmployee,
             @ModelAttribute("rental") Rental rental
         ) {
 
-        rental.setPickUpDate(new Date());
+        if (idCar == null || idEmployee == null) {
 
-        rental.setCar(carService.findById(idCar));
-        rental.setEmployee(employeeService.findById(idEmployee));
-        carService.findById(idCar).setStatus("unavailable");
+            return "redirect:/rentals/showAddForm?error=unselected";
+        } else {
+            rental.setPickUpDate(new Date());
 
+            rental.setCar(carService.findById(idCar));
+            rental.setEmployee(employeeService.findById(idEmployee));
+            carService.findById(idCar).setStatus("unavailable");
 
-        rentalService.save(rental);
-        return "redirect:/rentals/list";
-
+            rentalService.save(rental);
+            return "redirect:/rentals/list";
         }
+    }
 
     @PostMapping("/edit")
     public String editRental(
-            @RequestParam("idCheckedCar") int idCar,
-            @RequestParam("idCheckedEmployee") int idEmployee,
+            @RequestParam(value = "idCheckedCar", required = false) Integer idCar,
+            @RequestParam(value = "idCheckedEmployee", required = false) Integer idEmployee,
             @RequestParam("rentalId") int idRental,
             @Valid @ModelAttribute("rental") Rental rental,
             BindingResult bindingResult
     ) {
 
-        Car previousCar = carService.findById(rentalService.findById(idRental).getCar().getId());
+        if(idCar == null || idEmployee == null){
 
-        previousCar.setStatus("available");
+            return "redirect:/rentals/showUpdateForm?rentalId=" + idRental + "&error=unselected";
+        }else {
+            Car previousCar = carService.findById(rentalService.findById(idRental).getCar().getId());
+
+            previousCar.setStatus("available");
 
 
-        rental.setCar(carService.findById(idCar));
-        rental.setEmployee(employeeService.findById(idEmployee));
-        carService.findById(idCar).setStatus("unavailable");
+            rental.setCar(carService.findById(idCar));
+            rental.setEmployee(employeeService.findById(idEmployee));
+            carService.findById(idCar).setStatus("unavailable");
 
-        if(bindingResult.hasFieldErrors("pickUpDate") && bindingResult.hasFieldErrors("returnDate")){
-            return "redirect:/rentals/showUpdateForm?rentalId=" + idRental + "&errorPickUpDate=wrongPickUpDate&errorReturnDate=wrongReturnDate";
-        }else if(bindingResult.hasFieldErrors("returnDate")) {
-            return "redirect:/rentals/showUpdateForm?rentalId=" + idRental + "&errorReturnDate=wrongReturnDate";
-        }else if(bindingResult.hasFieldErrors("pickUpDate")){
-            return "redirect:/rentals/showUpdateForm?rentalId=" + idRental + "&errorPickUpDate=wrongPickUpDate";
-        }else{
-            rentalService.save(rental);
-            return "redirect:/rentals/list";
+            if (bindingResult.hasFieldErrors("pickUpDate") && bindingResult.hasFieldErrors("returnDate")) {
+                return "redirect:/rentals/showUpdateForm?rentalId=" + idRental + "&errorPickUpDate=wrongPickUpDate&errorReturnDate=wrongReturnDate";
+            } else if (bindingResult.hasFieldErrors("returnDate")) {
+                return "redirect:/rentals/showUpdateForm?rentalId=" + idRental + "&errorReturnDate=wrongReturnDate";
+            } else if (bindingResult.hasFieldErrors("pickUpDate")) {
+                return "redirect:/rentals/showUpdateForm?rentalId=" + idRental + "&errorPickUpDate=wrongPickUpDate";
+            } else {
+                rentalService.save(rental);
+                return "redirect:/rentals/list";
+            }
         }
     }
 
@@ -230,5 +243,23 @@ public class RentalController {
         return "redirect:/rentals/list";
     }
 
+    @GetMapping("/export")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("text/xlsx");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormat.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename = rentals_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        List<Rental> rentalList = rentalService.findAll("id", "asc");
+
+        RentalExcelExporter rentalExcelExporter = new RentalExcelExporter(rentalList);
+
+        rentalExcelExporter.export(response);
+
+
+    }
 
 }

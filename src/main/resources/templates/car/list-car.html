@@ -44,6 +44,7 @@ function toogle(source){
     <security sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
   <a th:href="@{/cars/showAddForm}" class="btn btn-primary">Add</a>
   <button type="submit" class="btn btn-primary">Delete</button>
+      <a th:href="@{/cars/export}" class="btn btn-primary">Export to Excel</a>
     </security>
     <br>
     <br>

@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // matchers for all
                 .antMatchers("/", "/users/showChangePasswordForm", "/users/changePassword", "/**/list", "/rentals/showReturnForm", "/rentals/showAddForm", "/rentals/remove", "/rentals/save", "/users/search", "/cars/search", "/employees/search").hasAnyRole("USER", "ADMIN", "MANAGER")
                 // matchers for manager/admin
-                .antMatchers("/cars/showAddForm", "/cars/delete", "/cars/save", "/cars/showUpdateForm", "/employees/delete", "/employees/save", "/employees/showAddForm", "/employees/showUpdateForm", "/rentals/delete", "/rentals/edit", "/rentals/showAddForm", "/rentals/showUpdateForm").hasAnyRole("MANAGER", "ADMIN")
+                .antMatchers("cars/export", "users/export", "/cars/showAddForm", "/cars/delete", "/cars/save", "/cars/showUpdateForm", "employees/export", "/employees/delete", "/employees/save", "/employees/showAddForm", "/employees/showUpdateForm", "rentals/export", "/rentals/delete", "/rentals/edit", "/rentals/showUpdateForm").hasAnyRole("MANAGER", "ADMIN")
                 // matchers for only manager
                 .antMatchers("/users/showAddForm", "/users/save", "/users/delete").hasRole("MANAGER")
                 .and()

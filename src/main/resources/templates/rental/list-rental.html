@@ -48,6 +48,7 @@
   <a th:href="@{/rentals/showAddForm}" class="btn btn-primary">Pick Up Car</a>
     <security sec:authorize="hasAnyRole('MANAGER', 'ADMIN')">
       <button type="submit" class="btn btn-primary">Delete</button>
+      <a th:href="@{/rentals/export}" class="btn btn-primary">Export To Excel</a>
     </security>
     <br>
     <br>

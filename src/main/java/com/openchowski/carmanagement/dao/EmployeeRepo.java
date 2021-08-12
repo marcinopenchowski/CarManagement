@@ -11,10 +11,9 @@ import java.util.List;
 @Repository
 public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
 
-    @Query("select e from Employee e where e.firstName like %?1% OR e.lastName like %?1% OR e.email like %?1% OR e.jobTitle like %?1%")
+    @Query("select e from Employee e where CONCAT(e.id, e.email, e.firstName, e.jobTitle, e.lastName, e.phoneNumber) like %?1%")
     List<Employee> searchEmployee(String searchName);
 
-    // add converted int value (ID and YEAR)
 
 }
 
